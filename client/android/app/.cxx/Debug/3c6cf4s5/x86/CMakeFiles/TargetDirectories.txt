@@ -1,0 +1,2 @@
+/Users/cengdong/FlutterProjects/flutter-spotify-clone/client/android/app/.cxx/Debug/3c6cf4s5/x86/CMakeFiles/edit_cache.dir
+/Users/cengdong/FlutterProjects/flutter-spotify-clone/client/android/app/.cxx/Debug/3c6cf4s5/x86/CMakeFiles/rebuild_cache.dir
