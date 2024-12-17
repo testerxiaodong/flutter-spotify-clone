@@ -8,7 +8,7 @@ class CustomField extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.controller,
-    required this.isObscureText,
+    this.isObscureText = false,
   });
 
   @override
@@ -17,6 +17,12 @@ class CustomField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(hintText: hintText),
       obscureText: isObscureText,
+      validator: (value) {
+        if (value!.trim().isEmpty) {
+          return "$hintText is missing";
+        }
+        return null;
+      },
     );
   }
 }

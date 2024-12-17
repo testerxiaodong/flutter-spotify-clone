@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"server/models"
+	"server/router"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	fmt.Println("hello world")
+	r := gin.Default()
+	models.InitDB()
+	router.InitRouter(r)
+	r.Run()
 }
