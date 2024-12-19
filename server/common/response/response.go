@@ -10,9 +10,9 @@ import (
 
 // Response 通用返回对象
 type Response struct {
-	Code uint32      `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data,omitempty"`
+	Code    uint32      `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 // Success 成功时调用
@@ -26,8 +26,8 @@ func Success(data interface{}) *Response {
 
 // ErrResponse 错误返回对象
 type ErrResponse struct {
-	Code uint32 `json:"code"`
-	Msg  string `json:"msg"`
+	Code    uint32 `json:"code"`
+	Message string `json:"message"`
 }
 
 // Error 失败时调用
@@ -45,7 +45,6 @@ func Result(c *gin.Context, resp interface{}, err error) {
 		// 成功返回
 		r := Success(resp)
 		c.JSON(http.StatusOK, r)
-		return
 	} else {
 		// 默认返回系统错误
 		errCode := xerror.SERVER_ERROR

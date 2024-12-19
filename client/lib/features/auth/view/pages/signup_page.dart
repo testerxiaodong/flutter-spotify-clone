@@ -1,19 +1,21 @@
 import 'package:client/core/theme/app_pallete.dart';
-import 'package:client/features/auth/repositories/auth_remote_repositories.dart';
+import 'package:client/core/utils.dart';
+import 'package:client/core/widgets/loader.dart';
 import 'package:client/features/auth/view/pages/login_page.dart';
 import 'package:client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:client/features/auth/view/widgets/custom_field.dart';
+import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  ConsumerState<SignupPage> createState() => _SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageState extends ConsumerState<SignupPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -30,6 +32,23 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authViewModelProvider, (_, next) {
+      next?.when(
+        data: (data) {
+          showSnackBar(context, 'Account created successfully! Please login.');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        },
+        error: (error, st) {
+          showSnackBar(context, error.toString());
+        },
+        loading: () {
+          return const Loader();
+        },
+      );
+    });
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -41,9 +60,9 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               const Text(
                 'Sign Up',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               CustomField(controller: nameController, hintText: "Name"),
               const SizedBox(height: 15),
               CustomField(controller: emailController, hintText: "Email"),
@@ -53,20 +72,19 @@ class _SignupPageState extends State<SignupPage> {
                 hintText: "Password",
                 isObscureText: true,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               AuthGradientButton(
                 buttonText: 'Sign up',
                 onTap: () async {
-                  final res = await AuthRemoteRepository().signup(
-                    name: nameController.text,
-                    email: emailController.text,
-                    password: passwordController.text,
-                  );
-                  final val = switch (res) {
-                    Left(value: final l) => l,
-                    Right(value: final r) => r,
-                  };
-                  print(val);
+                  if (formKey.currentState!.validate()) {
+                    await ref
+                        .read(authViewModelProvider.notifier)
+                        .signUpUser(
+                          name: nameController.text,
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
+                  }
                 },
               ),
               const SizedBox(height: 20),
