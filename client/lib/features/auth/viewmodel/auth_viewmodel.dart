@@ -15,8 +15,6 @@ class AuthViewModel extends _$AuthViewModel {
   AsyncValue<UserModel>? build() {
     _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
     _authLocalRepository = ref.watch(authLocalRepositoryProvider);
-    // 确保初始化 SharedPreferences
-    ref.watch(authLocalRepositoryProvider).init(); // 等待初始化完成
     return null;
   }
 
@@ -68,7 +66,15 @@ class AuthViewModel extends _$AuthViewModel {
   Future<UserModel?> getData() async {
     state = const AsyncValue.loading();
     final token = _authLocalRepository.getToken();
-    if (token == null) {}
+    if (token != null) {
+      final res = await _authRemoteRepository.getCurrentUserData(token);
+      final val = switch (res) {
+        Left(value: final l) =>
+          state = AsyncValue.error(l.message, StackTrace.current),
+        Right(value: final r) => state = AsyncValue.data(r),
+      };
+      return val.value;
+    }
     return null;
   }
 }

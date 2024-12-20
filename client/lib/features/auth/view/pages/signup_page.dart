@@ -27,7 +27,6 @@ class _SignupPageState extends ConsumerState<SignupPage> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-    formKey.currentState!.validate();
   }
 
   @override
@@ -50,68 +49,78 @@ class _SignupPageState extends ConsumerState<SignupPage> {
       );
     });
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Sign Up',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              CustomField(controller: nameController, hintText: "Name"),
-              const SizedBox(height: 15),
-              CustomField(controller: emailController, hintText: "Email"),
-              const SizedBox(height: 15),
-              CustomField(
-                controller: passwordController,
-                hintText: "Password",
-                isObscureText: true,
-              ),
-              const SizedBox(height: 15),
-              AuthGradientButton(
-                buttonText: 'Sign up',
-                onTap: () async {
-                  if (formKey.currentState!.validate()) {
-                    await ref
-                        .read(authViewModelProvider.notifier)
-                        .signUpUser(
-                          name: nameController.text,
-                          email: emailController.text,
-                          password: passwordController.text,
-                        );
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Already have an acount?',
-                    style: Theme.of(context).textTheme.titleMedium,
-                    children: [
-                      TextSpan(
-                        text: 'Sign in',
-                        style: TextStyle(
-                          color: Pallete.gradient2,
-                          fontWeight: FontWeight.bold,
-                        ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Sign Up',
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                CustomField(controller: nameController, hintText: "Name"),
+                const SizedBox(height: 15),
+                CustomField(controller: emailController, hintText: "Email"),
+                const SizedBox(height: 15),
+                CustomField(
+                  controller: passwordController,
+                  hintText: "Password",
+                  isObscureText: true,
+                ),
+                const SizedBox(height: 15),
+                AuthGradientButton(
+                  buttonText: 'Sign up',
+                  onTap: () async {
+                    if (formKey.currentState!.validate()) {
+                      await ref
+                          .read(authViewModelProvider.notifier)
+                          .signUpUser(
+                            name: nameController.text,
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                    } else {
+                      showSnackBar(
+                        context,
+                        'Please fill all fields correctly.',
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
                       ),
-                    ],
+                    );
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Already have an acount?',
+                      style: Theme.of(context).textTheme.titleMedium,
+                      children: [
+                        TextSpan(
+                          text: 'Sign in',
+                          style: TextStyle(
+                            color: Pallete.gradient2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

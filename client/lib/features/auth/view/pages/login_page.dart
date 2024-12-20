@@ -25,7 +25,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-    formKey.currentState!.validate();
   }
 
   @override
@@ -44,76 +43,84 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
     });
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(),
       body:
           isLoading
               ? const Loader()
-              : Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Sign In',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      CustomField(
-                        controller: emailController,
-                        hintText: "Email",
-                      ),
-                      const SizedBox(height: 15),
-                      CustomField(
-                        controller: passwordController,
-                        hintText: "Password",
-                        isObscureText: true,
-                      ),
-                      const SizedBox(height: 15),
-                      AuthGradientButton(
-                        buttonText: 'Sign in',
-                        onTap: () async {
-                          if (formKey.currentState!.validate()) {
-                            await ref
-                                .read(authViewModelProvider.notifier)
-                                .loginUser(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignupPage(),
-                            ),
-                          );
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'Don\'t have an acount?',
-                            style: Theme.of(context).textTheme.titleMedium,
-                            children: [
-                              TextSpan(
-                                text: 'Sign up',
-                                style: TextStyle(
-                                  color: Pallete.gradient2,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+              : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Sign In',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        CustomField(
+                          controller: emailController,
+                          hintText: "Email",
+                        ),
+                        const SizedBox(height: 15),
+                        CustomField(
+                          controller: passwordController,
+                          hintText: "Password",
+                          isObscureText: true,
+                        ),
+                        const SizedBox(height: 15),
+                        AuthGradientButton(
+                          buttonText: 'Sign in',
+                          onTap: () async {
+                            if (formKey.currentState!.validate()) {
+                              await ref
+                                  .read(authViewModelProvider.notifier)
+                                  .loginUser(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                            } else {
+                              showSnackBar(
+                                context,
+                                "Please fill all fields correctly.",
+                              );
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignupPage(),
+                              ),
+                            );
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Don\'t have an acount?',
+                              style: Theme.of(context).textTheme.titleMedium,
+                              children: [
+                                TextSpan(
+                                  text: 'Sign up',
+                                  style: TextStyle(
+                                    color: Pallete.gradient2,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
