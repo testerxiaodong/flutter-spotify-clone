@@ -3,8 +3,9 @@ import 'package:client/core/utils.dart';
 import 'package:client/core/widgets/loader.dart';
 import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/view/widgets/auth_gradient_button.dart';
-import 'package:client/features/auth/view/widgets/custom_field.dart';
+import 'package:client/core/widgets/custom_field.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:client/features/home/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,12 +30,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewModelProvider)?.isLoading == true;
+    final isLoading = ref.watch(
+      authViewModelProvider.select((val) => val?.isLoading == true),
+    );
     ref.listen(authViewModelProvider, (_, next) {
       next?.when(
         data: (data) {
           // 登录成功后的逻辑
-          showSnackBar(context, "登录成功"); // 这里显示成功的消息
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            (_) => false,
+          );
         },
         error: (error, st) {
           showSnackBar(context, error.toString());
@@ -59,11 +66,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         const Text(
                           'Sign In',
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 50,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         CustomField(
                           controller: emailController,
                           hintText: "Email",
@@ -93,7 +100,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             }
                           },
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
