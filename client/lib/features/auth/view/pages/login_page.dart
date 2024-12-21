@@ -81,7 +81,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           hintText: "Password",
                           isObscureText: true,
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         AuthGradientButton(
                           buttonText: 'Sign in',
                           onTap: () async {

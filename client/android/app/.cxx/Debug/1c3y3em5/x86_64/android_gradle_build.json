@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "/Users/cengdong/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/cengdong/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/cengdong/FlutterProjects/flutter-spotify-clone/client/android/app/.cxx/Debug/1c3y3em5/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/cengdong/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/cengdong/FlutterProjects/flutter-spotify-clone/client/android/app/.cxx/Debug/1c3y3em5/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {},
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/cengdong/Library/Android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/cengdong/Library/Android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": []
+}
